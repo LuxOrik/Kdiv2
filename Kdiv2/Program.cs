@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kdiv2
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {
@@ -15,7 +15,7 @@ namespace Kdiv2
             {
                 for (int page = 0; page < 200; page++)
                 {
-                    Tuple<int, int> sol = Proposition1(page, limit);
+                    (int, int) sol = Proposition1(page, limit);
                     if (!TestSolution(page, limit, sol))
                         throw new Exception("BOOM");
                     Debug.WriteLine($"{page,3} {limit,3} -> {sol.Item1,3} {sol.Item2,3}");
@@ -40,7 +40,7 @@ namespace Kdiv2
         // On choisir un limitR, on test si il convient (équation marche ET le pageR qui en découle peut être entier)
         // sinon on test le limitR suivant (on commence a limitU + 1, on c'est que ce sera notre minimum de requested)
 
-        private static Tuple<int, int> Proposition1(int userPage, int userLimit)
+        private static (int, int) Proposition1(int userPage, int userLimit)
         {
             var sup = userPage*userLimit;
             var inf = (userPage + 1)*userLimit + 1;
@@ -54,14 +54,14 @@ namespace Kdiv2
                 // Pas chercher plus ici, peut être opti pitetre
                 var supFloor = Math.Floor(supI);
                 if (supFloor >= infI)
-                    return new Tuple<int, int>((int) supFloor, i);
+                    return ((int) supFloor, i);
                 var infCeil = Math.Ceiling(infI);
                 if (infCeil <= supI)
-                    return new Tuple<int, int>((int) infCeil, i);
+                    return ((int) infCeil, i);
             }
         }
 
-        private static bool TestSolution(int userPage, int userLimit, Tuple<int, int> solution)
+        private static bool TestSolution(int userPage, int userLimit, (int, int) solution)
         {
             return userPage*userLimit >= solution.Item1*solution.Item2
                    && userPage*userLimit + userLimit <= solution.Item1*solution.Item2 + solution.Item2;
